@@ -1,8 +1,9 @@
 FROM node:21 as builder
 WORKDIR /app
 COPY . .
-RUM npm install
-RUM npm build
+RUN npm install
+RUN npm rum build
+
 
 FROM nginx:alpine
 COPY --from=builder /app/dist/my-angular-app/browser usr/share/nginx/html
@@ -12,4 +13,4 @@ EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 
 #docker build -t angular-docker .
-#docker rum -p 8080:80 angular-docker .
+#docker run -p 8080:80 angular-docker .
