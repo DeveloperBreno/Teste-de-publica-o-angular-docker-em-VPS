@@ -5,7 +5,7 @@ COPY . .
 RUN npm install
 RUN npm run build
 # Certifique-se de que docker-entrypoint.sh está realmente necessário e copiado, se necessário
-COPY docker-entrypoint.sh /docker-entrypoint.sh
+COPY --chmod=755 docker-entrypoint.sh /docker-entrypoint.sh
 RUN ["chmod", "+x", "/docker-entrypoint.sh"]
 
 # Etapa de produção
