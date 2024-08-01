@@ -1,16 +1,20 @@
+# Etapa de construção
 FROM node:21 as builder
 WORKDIR /app
 COPY . .
 RUN npm install
-RUN npm rum build
-RUN ["chmod", "+x", "docker-entrypoint.sh"]
+RUN npm run build
+# Certifique-se de que docker-entrypoint.sh está realmente necessário e copiado, se necessário
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN ["chmod", "+x", "/docker-entrypoint.sh"]
 
-
+# Etapa de produção
 FROM nginx:alpine
-COPY --from=builder /app/dist/my-angular-app/browser usr/share/nginx/html
+COPY --from=builder /app/dist/my-angular-app/browser /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY mime.types /etc/nginx/mime.types
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 
+# Comando para construir e rodar
 # docker build -t angular-docker . && docker run -p 80:80 angular-docker .
